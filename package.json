@@ -1,0 +1,10 @@
+{
+  "name": "narou-cli",
+  "version": "0.1.0",
+  "description": "Read Narou Novels in your Terminal",
+  "main": "src/index.js",
+  "repository": "https://github.com/range3/narou-cli/",
+  "author": "range3 (https://github.com/range3)",
+  "license": "MIT",
+  "private": true
+}
