@@ -1,0 +1,38 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "npx: sort-package-json",
+      "type": "shell",
+      "command": "npx sort-package-json",
+      "problemMatcher": [],
+      "detail": "npx sort-package-json"
+    },
+    {
+      "type": "npm",
+      "script": "test",
+      "group": "test",
+      "problemMatcher": [],
+      "label": "npm: test",
+      "detail": "mocha --recursive --timeout 10000"
+    },
+    {
+      "label": "npm: test specified",
+      "type": "npm",
+      "script": "test -- --grep ${input:testGrep}",
+      "group": "test",
+      "problemMatcher": [],
+      "detail": "mocha --recursive --timeout 10000 --grep \"regexp\""
+    },
+  ],
+  "inputs": [
+    {
+      "id": "testGrep",
+      "description": "Only run tests matching this string or regexp",
+      "type": "promptString",
+      "default": "test"
+    }
+  ]
+}

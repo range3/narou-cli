@@ -1,10 +1,29 @@
 {
   "name": "narou-cli",
   "version": "0.1.0",
+  "private": true,
   "description": "Read Narou Novels in your Terminal",
-  "main": "src/index.js",
   "repository": "https://github.com/range3/narou-cli/",
-  "author": "range3 (https://github.com/range3)",
   "license": "MIT",
-  "private": true
+  "author": "range3 (https://github.com/range3)",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "coverage": "nyc npm run test",
+    "lint": "eslint --ignore-path .gitignore .",
+    "test": "mocha --recursive --timeout 10000"
+  },
+  "dependencies": {
+    "@range3/narou": "^0.2.0",
+    "jp-wrap": "^0.2.2",
+    "neo-blessed": "^0.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.2.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1"
+  }
 }
