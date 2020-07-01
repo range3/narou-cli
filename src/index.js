@@ -53,7 +53,7 @@ const PageToc = require('./pages/page-toc')
   })
 
   const openEpisodePage = (novel, eno) => {
-    return novel.episode(eno).then((ep) => {
+    return novel.episode(eno).fetch().then((ep) => {
       pageEpisode.reset()
       pageEpisode.setEpisode(ep)
       screen.render()
@@ -63,15 +63,19 @@ const PageToc = require('./pages/page-toc')
   }
 
   pageEpisode.root.key('l', () => {
-    openEpisodePage(novel, currentEpNo + 1).then(() => {
-      currentEpNo += 1
-    })
+    if (currentEpNo < novel.episodeLength) {
+      openEpisodePage(novel, currentEpNo + 1).then(() => {
+        currentEpNo += 1
+      })
+    }
   })
 
   pageEpisode.root.key('h', () => {
-    openEpisodePage(novel, currentEpNo - 1).then(() => {
-      currentEpNo -= 1
-    })
+    if (currentEpNo > 1) {
+      openEpisodePage(novel, currentEpNo - 1).then(() => {
+        currentEpNo -= 1
+      })
+    }
   })
 
   // Quit on Escape, q, or Control-C.
