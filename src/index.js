@@ -16,7 +16,8 @@ const PageToc = require('./pages/page-toc')
 ;(async () => {
   const ncodes = ['n5519gi', 'n3289ds', 'n3930eh', 'n2710db']
   const narou = new Narou()
-  const novel = await narou.novel(ncodes[process.argv[2] || 0])
+  const novel = narou.novel(ncodes[process.argv[2] || 0])
+  await novel.fetch()
 
   // console.log(novel.toc.toArray())
   // process.exit()
@@ -38,7 +39,7 @@ const PageToc = require('./pages/page-toc')
 
   let currentEpNo
   pageToc.on('select', (el, i) => {
-    novel.episode(el.no).then((ep) => {
+    novel.episode(el.no).fetch().then((ep) => {
       currentEpNo = el.no
       pageToc.hide()
       pageEpisode.reset()

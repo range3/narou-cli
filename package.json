@@ -14,7 +14,7 @@
     "test": "mocha --recursive --timeout 10000"
   },
   "dependencies": {
-    "@range3/narou": "^0.3.0",
+    "@range3/narou": "^0.4.0",
     "jp-wrap": "^0.2.2",
     "neo-blessed": "^0.2.0"
   },
