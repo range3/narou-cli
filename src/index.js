@@ -4,24 +4,10 @@ const Narou = require('@range3/narou')
 const blessed = require('neo-blessed')
 const PageEpisode = require('./pages/page-episode')
 const PageToc = require('./pages/page-toc')
-
-// const text = fs.readFileSync(`${__dirname}/sample.txt`, { encoding: 'utf-8' })
-
-// const episode = {
-//   preface: '前書き1\n前書き2\nああああ',
-//   content: text,
-//   afterword: '後書き1\n後書き2\n後書き3',
-// }
+const PageBookmarks = require('./pages/page-bookmarks')
+const Config = require('./config')
 
 ;(async () => {
-  const ncodes = ['n5519gi', 'n3289ds', 'n3930eh', 'n2710db']
-  const narou = new Narou()
-  const novel = narou.novel(ncodes[process.argv[2] || 0])
-  await novel.fetch()
-
-  // console.log(novel.toc.toArray())
-  // process.exit()
-
   // Create a screen object.
   const screen = blessed.screen({
     dump: path.resolve(__dirname, '../logs/test.log'),
@@ -32,70 +18,107 @@ const PageToc = require('./pages/page-toc')
     title: 'Narou CLI',
   })
 
-  const pageEpisode = new PageEpisode(screen, null, { wrap: true })
-  const pageToc = new PageToc(screen, novel.toc.toArray())
-  pageToc.show()
-  pageToc.focus()
+  try {
+    const config = new Config()
+    await config.load()
+    const narou = new Narou()
 
-  let currentEpNo
-  pageToc.on('select', (el, i) => {
-    novel.episode(el.no).fetch().then((ep) => {
-      currentEpNo = el.no
+    const pageEpisode = new PageEpisode(screen, null, { wrap: true })
+    const pageToc = new PageToc(screen)
+    const pageBookmarks = new PageBookmarks(screen)
+
+    pageBookmarks.setData(config.bookmarks.map(ncode => narou.novel(ncode)))
+    pageBookmarks.show()
+    pageBookmarks.focus()
+
+    let currentNovel = narou.novel(config.bookmarks[process.argv[2] || 0])
+    pageBookmarks.on('select', (novel, i) => {
+      currentNovel = novel
+      currentNovel.fetch()
+        .then(novel => {
+          pageBookmarks.hide()
+          pageToc.setData(novel.toc.toArray())
+          pageToc.show()
+          pageToc.focus()
+          screen.render()
+        })
+        .catch(err => screen.debug(err.message))
+    })
+
+    let currentEpNo
+    pageToc.on('select', (el, i) => {
+      currentNovel.episode(el.no).fetch().then((ep) => {
+        currentEpNo = el.no
+        pageToc.hide()
+        pageEpisode.reset()
+        pageEpisode.setEpisode(ep)
+        pageEpisode.show()
+        pageEpisode.focus()
+        screen.render()
+      }).catch((err) => {
+        screen.debug(err)
+      })
+    })
+
+    const openEpisodePage = (novel, eno) => {
+      return novel.episode(eno).fetch().then((ep) => {
+        pageEpisode.reset()
+        pageEpisode.setEpisode(ep)
+        screen.render()
+      }).catch((err) => {
+        screen.debug(err)
+      })
+    }
+
+    pageEpisode.root.key('l', () => {
+      if (currentEpNo < currentNovel.episodeLength) {
+        openEpisodePage(currentNovel, currentEpNo + 1).then(() => {
+          currentEpNo += 1
+        })
+      }
+    })
+
+    pageEpisode.root.key('h', () => {
+      if (currentEpNo > 1) {
+        openEpisodePage(currentNovel, currentEpNo - 1).then(() => {
+          currentEpNo -= 1
+        })
+      }
+    })
+
+    // Quit on Escape, q, or Control-C.
+    screen.key(['escape', 'q', 'C-c'], (ch, key) => {
+      config.save()
+        .finally(() => {
+          screen.destroy()
+          process.exit(0)
+        })
+    })
+
+    screen.key('m', () => {
+      pageToc.show()
+      pageToc.focus()
+      screen.render()
+    })
+
+    screen.key('b', () => {
       pageToc.hide()
-      pageEpisode.reset()
-      pageEpisode.setEpisode(ep)
-      pageEpisode.show()
-      pageEpisode.focus()
+      pageEpisode.hide()
+      pageBookmarks.show()
+      pageBookmarks.focus()
       screen.render()
-    }).catch((err) => {
-      screen.debug(err)
     })
-  })
 
-  const openEpisodePage = (novel, eno) => {
-    return novel.episode(eno).fetch().then((ep) => {
-      pageEpisode.reset()
-      pageEpisode.setEpisode(ep)
-      screen.render()
-    }).catch((err) => {
-      screen.debug(err)
-    })
-  }
+    // Focus our element.
+    // episodeViewer.root.focus()
 
-  pageEpisode.root.key('l', () => {
-    if (currentEpNo < novel.episodeLength) {
-      openEpisodePage(novel, currentEpNo + 1).then(() => {
-        currentEpNo += 1
-      })
-    }
-  })
-
-  pageEpisode.root.key('h', () => {
-    if (currentEpNo > 1) {
-      openEpisodePage(novel, currentEpNo - 1).then(() => {
-        currentEpNo -= 1
-      })
-    }
-  })
-
-  // Quit on Escape, q, or Control-C.
-  screen.key(['escape', 'q', 'C-c'], (ch, key) => {
-    screen.destroy()
-    process.exit(0)
-  })
-
-  screen.key('m', () => {
-    pageToc.show()
-    pageToc.focus()
+    // Render the screen.
     screen.render()
-  })
-
-  // Focus our element.
-  // episodeViewer.root.focus()
-
-  // Render the screen.
-  screen.render()
+  } catch (err) {
+    screen.debug(err.message)
+    throw err
+  }
 })()
   .catch(err => {
-    console.log(err)
+    console.err(err)
   })

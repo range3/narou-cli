@@ -1,8 +1,8 @@
 const blessed = require('neo-blessed')
 const PageBase = require('./page-base')
 
-class PageToc extends PageBase {
-  constructor (screen, toc = []) {
+class PageBookmarks extends PageBase {
+  constructor (screen, novels = []) {
     super(blessed.box({
       parent: screen,
     }))
@@ -29,10 +29,10 @@ class PageToc extends PageBase {
       },
     })
 
-    this.setData(toc)
+    this.setData(novels)
 
     this.table.on('select', (el, i) => {
-      this.emit('select', this.toc.filter(c => c.type === 'episode')[i - 1], i - 1)
+      this.emit('select', this.novels[i - 1], i - 1)
     })
   }
 
@@ -40,17 +40,16 @@ class PageToc extends PageBase {
     this.table.focus()
   }
 
-  setData (toc) {
-    this.toc = toc
+  setData (novels) {
+    this.novels = novels
     this.table.setData([
-      ['Subtitle', 'Created', 'Updated'],
-      ...toc
-        .filter(c => c.type === 'episode')
-        .map(c => {
-          return [c.subtitle || '', c.created || '', c.updated || '']
+      ['ncode'],
+      ...novels
+        .map(novel => {
+          return [novel.ncode]
         }),
     ])
   }
 }
 
-module.exports = PageToc
+module.exports = PageBookmarks
