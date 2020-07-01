@@ -14,14 +14,14 @@
     "test": "mocha --recursive --timeout 10000"
   },
   "dependencies": {
-    "@range3/narou": "^0.2.0",
+    "@range3/narou": "^0.3.0",
     "jp-wrap": "^0.2.2",
     "neo-blessed": "^0.2.0"
   },
   "devDependencies": {
-    "eslint": "^7.2.0",
+    "eslint": "^7.3.1",
     "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1"
