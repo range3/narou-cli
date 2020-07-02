@@ -13,6 +13,16 @@ bookmarks:
 $ docker-compose build
 $ docker-compose run --rm cli
 ```
+or
+```
+$ npx narou-cli
+```
+or
+```
+$ npm -g install narou-cli
+$ narou
+```
+
 
 ## 操作方法
 - 終了
