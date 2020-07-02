@@ -8,7 +8,6 @@ class Config {
   constructor (options = {}) {
     const dirs = new AppDirectory({
       appName: packageJson.name,
-      appVersion: packageJson.version,
     })
     this.path = options.path || path.resolve(dirs.userConfig(), 'config.yml')
     this.clear()
