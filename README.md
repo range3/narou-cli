@@ -3,7 +3,7 @@
 
 ## 設定ファイル＆起動
 ```bash
-$ vi ~/.config/narou-cli/0.1.0-alpha.1/config.yml
+$ vi ~/.config/narou-cli/config.yml
 bookmarks:
   - n5519gi
   - n3289ds
