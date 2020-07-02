@@ -33,7 +33,12 @@ class PageToc extends PageBase {
     this.setData(toc)
 
     this.table.on('select', (el, i) => {
-      this.emit('select', this.toc.filter(c => c.type === 'episode')[i - 1], i - 1)
+      const selected = this.toc[i - 1]
+      if (selected.type === 'episode') {
+        this.emit('select',
+          selected,
+          this.toc.slice(0, i).filter(c => c.type === 'episode').length)
+      }
     })
   }
 
@@ -46,9 +51,12 @@ class PageToc extends PageBase {
     this.table.setData([
       ['Subtitle', 'Created', 'Updated'],
       ...toc
-        .filter(c => c.type === 'episode')
         .map(c => {
-          return [c.subtitle || '', c.created || '', c.updated || '']
+          if (c.type === 'episode') {
+            return [` ${c.subtitle || ''}`, c.created || '', c.updated || '']
+          } else if (c.type === 'chapter') {
+            return [c.title]
+          }
         }),
     ])
   }
