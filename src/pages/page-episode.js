@@ -33,6 +33,12 @@ class PageEpisode extends PageBase {
       this.root.screen.render()
     })
 
+    this.subtitle = blessed.box({
+      parent: this.root,
+      content: this.wrap(episode?.subtitle),
+      width: '100%',
+    })
+
     this.preface = blessed.box({
       parent: this.root,
       content: this.wrap(episode?.preface),
@@ -65,6 +71,7 @@ class PageEpisode extends PageBase {
   }
 
   setEpisode (ep) {
+    this.subtitle.setText(this.wrap(ep.subtitle))
     this.preface.setText(this.wrap(ep.preface))
     this.content.setText(this.wrap(ep.content))
     this.afterword.setText(this.wrap(ep.afterword))
@@ -73,14 +80,17 @@ class PageEpisode extends PageBase {
   }
 
   calcBoxPosition () {
-    this.preface.top = 0
+    this.subtitle.top = 0
+    this.subtitle.height = this.subtitle.getScreenLines().length
+
+    this.preface.top = this.subtitle.top + this.subtitle.height + 1
 
     if (this.preface.getText()) {
       this.preface.height = this.preface.getScreenLines().length
       this.content.top = this.preface.top + this.preface.height + 1
     } else {
       this.preface.height = 0
-      this.content.top = 0
+      this.content.top = this.preface.top
     }
     this.content.height = this.content.getScreenLines().length
     this.afterword.height = this.afterword.getScreenLines().length
