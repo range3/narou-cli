@@ -9,6 +9,7 @@ class PageToc extends PageBase {
 
     this.table = blessed.listtable({
       parent: this.root,
+      align: 'left',
       width: '100%',
       keys: true,
       vi: true,
