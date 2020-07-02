@@ -11,6 +11,10 @@ class PageEpisode extends PageBase {
       mouse: true,
       keys: true,
       vi: true,
+      scrollbar: {
+        bg: 'white',
+        ch: ' ',
+      },
     }))
 
     this.options = {
@@ -36,25 +40,37 @@ class PageEpisode extends PageBase {
     this.subtitle = blessed.box({
       parent: this.root,
       content: this.wrap(episode?.subtitle),
-      width: '100%',
+      width: '100%-1',
     })
 
     this.preface = blessed.box({
       parent: this.root,
       content: this.wrap(episode?.preface),
-      width: '100%',
+      width: '100%-1',
     })
 
     this.content = blessed.box({
       parent: this.root,
       content: this.wrap(episode?.content),
-      width: '100%',
+      width: '100%-1',
     })
 
     this.afterword = blessed.box({
       parent: this.root,
       content: this.wrap(episode?.afterword),
-      width: '100%',
+      width: '100%-1',
+    })
+
+    this.line1 = blessed.line({
+      parent: this.root,
+      width: '100%-1',
+      orientation: 'horizontal',
+    })
+
+    this.line2 = blessed.line({
+      parent: this.root,
+      width: '100%-1',
+      orientation: 'horizontal',
     })
 
     if (episode) {
@@ -87,14 +103,20 @@ class PageEpisode extends PageBase {
 
     if (this.preface.getText()) {
       this.preface.height = this.preface.getScreenLines().length
-      this.content.top = this.preface.top + this.preface.height + 1
+      this.line1.top = this.preface.top + this.preface.height
+      this.content.top = this.line1.top + 1
     } else {
+      this.line1.hide()
       this.preface.height = 0
       this.content.top = this.preface.top
     }
     this.content.height = this.content.getScreenLines().length
+    this.line2.top = this.content.top + this.content.height
+    this.afterword.top = this.line2.top + 1
     this.afterword.height = this.afterword.getScreenLines().length
-    this.afterword.top = this.content.top + this.content.height + 1
+    if (!this.afterword.getText()) {
+      this.line2.hide()
+    }
   }
 }
 
