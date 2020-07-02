@@ -1,5 +1,3 @@
-// const fs = require('fs')
-const path = require('path')
 const Narou = require('@range3/narou')
 const blessed = require('neo-blessed')
 const PageEpisode = require('./pages/page-episode')
@@ -10,7 +8,7 @@ const Config = require('./config')
 ;(async () => {
   // Create a screen object.
   const screen = blessed.screen({
-    dump: path.resolve(__dirname, '../logs/test.log'),
+    // dump: path.resolve(__dirname, '../logs/test.log'),
     debug: true,
     warning: true,
     smartCSR: true,
@@ -122,9 +120,11 @@ const Config = require('./config')
     screen.render()
   } catch (err) {
     screen.debug(err.message)
+    screen.destroy()
     throw err
   }
 })()
   .catch(err => {
-    console.err(err)
+    console.error(err)
+    process.exit(1)
   })
