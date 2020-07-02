@@ -1,4 +1,6 @@
 # narou-cli
+[![npm version](https://badge.fury.io/js/narou-cli.svg)](https://badge.fury.io/js/narou-cli)
+
 > 小説家になろうリーダー on Terminal
 
 ## 設定ファイル＆起動
