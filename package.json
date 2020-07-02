@@ -7,6 +7,9 @@
   "license": "MIT",
   "author": "range3 (https://github.com/range3)",
   "main": "src/index.js",
+  "bin": {
+    "narou": "bin/narou"
+  },
   "scripts": {
     "start": "node src/index.js",
     "coverage": "nyc npm run test",
