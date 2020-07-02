@@ -1,6 +1,6 @@
 {
   "name": "narou-cli",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "private": true,
   "description": "Read Narou Novels in your Terminal",
   "repository": "https://github.com/range3/narou-cli/",
@@ -14,7 +14,7 @@
     "start": "node src/index.js",
     "coverage": "nyc npm run test",
     "lint": "eslint --ignore-path .gitignore .",
-    "test": "mocha --recursive --timeout 10000"
+    "test": "echo no test"
   },
   "dependencies": {
     "@range3/narou": "^0.5.0",
