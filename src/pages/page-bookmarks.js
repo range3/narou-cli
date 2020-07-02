@@ -10,6 +10,7 @@ class PageBookmarks extends PageBase {
     this.table = blessed.listtable({
       parent: this.root,
       width: '100%',
+      align: 'left',
       keys: true,
       vi: true,
       mouse: true,
@@ -43,10 +44,13 @@ class PageBookmarks extends PageBase {
   setData (novels) {
     this.novels = novels
     this.table.setData([
-      ['ncode'],
+      ['Title', 'Updated', 'ncode'],
       ...novels
         .map(novel => {
-          return [novel.ncode]
+          return [
+            novel.metadata?.title || '',
+            novel.metadata?.novelupdated_at || '',
+            novel.ncode]
         }),
     ])
   }

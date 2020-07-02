@@ -27,7 +27,13 @@ const Config = require('./config')
     const pageToc = new PageToc(screen)
     const pageBookmarks = new PageBookmarks(screen)
 
-    pageBookmarks.setData(config.bookmarks.map(ncode => narou.novel(ncode)))
+    const novels = await narou.getNovels(config.bookmarks)
+
+    novels.sort((a, b) =>
+      Date.parse(b.metadata.novelupdated_at) -
+      Date.parse(a.metadata.novelupdated_at))
+
+    pageBookmarks.setData(novels)
     pageBookmarks.show()
     pageBookmarks.focus()
 
