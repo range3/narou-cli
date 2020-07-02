@@ -38,6 +38,13 @@ class PageToc extends PageBase {
         this.emit('select',
           selected,
           this.toc.slice(0, i).filter(c => c.type === 'episode').length)
+      } else {
+        const next = this.toc[i]
+        if (next) {
+          this.emit('select',
+            next,
+            this.toc.slice(0, i + 1).filter(c => c.type === 'episode').length)
+        }
       }
     })
   }
