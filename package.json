@@ -1,6 +1,6 @@
 {
   "name": "narou-cli",
-  "version": "0.1.0-alpha.4",
+  "version": "0.1.0-alpha.5",
   "description": "Read Narou Novels in your Terminal",
   "repository": "https://github.com/range3/narou-cli/",
   "license": "MIT",
