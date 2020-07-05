@@ -74,7 +74,7 @@ const Config = require('./config')
       })
     }
 
-    pageEpisode.root.key('l', () => {
+    pageEpisode.root.key(['l', 'right'], () => {
       if (currentEpNo < currentNovel.episodeLength) {
         openEpisodePage(currentNovel, currentEpNo + 1).then(() => {
           currentEpNo += 1
@@ -82,7 +82,7 @@ const Config = require('./config')
       }
     })
 
-    pageEpisode.root.key('h', () => {
+    pageEpisode.root.key(['h', 'left'], () => {
       if (currentEpNo > 1) {
         openEpisodePage(currentNovel, currentEpNo - 1).then(() => {
           currentEpNo -= 1
